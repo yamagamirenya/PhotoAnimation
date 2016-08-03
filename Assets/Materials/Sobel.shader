@@ -4,6 +4,8 @@ Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
 	_Range("Range",Range(0.0001,1)) = 0.01
+		_Flip("Flip",Range(-1, 1)) = 0
+
 
 	}
 SubShader
@@ -22,6 +24,7 @@ Pass
 
 		sampler2D _MainTex;
 	float _Range;
+	float _Alpha;
 
 
 	float peek(float x, float y)
@@ -50,6 +53,8 @@ Pass
 	};
 
 	float4 _MainTex_ST;
+	uniform float _Flip;
+
 
 	v2f vert(appdata v)
 	{
@@ -63,7 +68,9 @@ Pass
 	fixed4 frag(v2f i) : SV_Target
 	{
 		float x = i.uv.x;
-	float y = i.uv.y;
+		float y = i.uv.y;
+		float l0_y = i.uv.x-_Flip;
+		clip(i.uv.y - l0_y);
 
 
 	float3x3 m = float3x3(
@@ -81,15 +88,23 @@ Pass
 			);
 	// sample the 
 	float d = length(h);
-	if (d<50) {	float d = length(h);
 
-		return float4(d, d, d, d);
-	}
-	else {
+		if (d < 50) {
+			float d = length(h);
+			return float4(d, d, d, d);
 
-		return float4(0, 0,0,0);
+		}
+		else {
+			return float4(0, 0, 0, 0);
+		}
 	}
-	}
+
+	
+	
+
+
+
+	
 		ENDCG
 	}
 	}

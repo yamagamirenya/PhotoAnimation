@@ -4,31 +4,102 @@ using System;
 
 public class FallPhoto : MonoBehaviour {
 
-    public bool picture_animation = false;
-    public Color alpha = new Color(0, 0, 0, 0.01f);
+    public GameObject
+       paperPhoto,
+       FallParticleSystem;
 
-    void Picture_Animation()
+    bool
+        move = true;
+
+    public bool
+        nextFallPhotoActiom;
+
+    float
+        d,
+        t = 0;
+
+    Material 
+        fallPhotoMaterial,
+        notePhotoMaterial;
+
+
+    void Start()
     {
-        if (picture_animation)
-        {
-            Console.Write("fvafa");
-            GetComponent<Renderer>().material.color -= alpha;
-            GameObject.Find("PictureParticle").SetActive(true);
-        }
+
+        fallPhotoMaterial = GetComponent<Renderer>().material;
+        notePhotoMaterial = paperPhoto.GetComponent<Renderer>().material;
+
     }
 
-    void Update () {
 
-        transform.position = this.transform.position
-                                       - new Vector3(0, 0.03f, Mathf.Sin(Time.time) * 0.01f);
+    public void Update () {
 
-        Picture_Animation();
+
+        FallPhotoMove();
+
+        NextFallPhotoAction();
+
 	}
 
-    void OnCollisionEnter(Collision other){
-        picture_animation = true;
+    void OnCollisionEnter(Collision other)
+    {
+        move = false;
+        paperPhoto.SetActive(true);
+        nextFallPhotoActiom = true;
+
     }
 
-    
+    void FallPhotoMove()
+    {
+        if (move)
+        {
+            d = Mathf.Sin(Time.time) * 0.01f;
+            transform.position = this.transform.position
+                                    - new Vector3(0, 0.02f, d);
+
+        }
+        else
+        {
+            transform.position = this.transform.position
+                                   - new Vector3(0, 0, 0);
+        }
+
+    }
+
+    void NextFallPhotoAction()
+    {
+        if (nextFallPhotoActiom)
+        {
+
+            this.GetComponent<Collider>().enabled = false;
+            FallParticleSystem.SetActive(true);
+
+
+            MaterialAToBAlphaSender(fallPhotoMaterial, notePhotoMaterial);
+
+
+            if (1 - t * 0.1f < 0)
+            {
+
+                nextFallPhotoActiom = false;
+                Destroy(this.gameObject);
+
+            }
+
+        }
+
+    }
+
+    //Below is in upper Object (NextFallPhotoAction)
+    void MaterialAToBAlphaSender(Material A,Material B)
+    {
+        t += Time.deltaTime;
+
+        A.SetFloat("_Alpha", 1 - t * 0.1f);
+        B.SetFloat("_Alpha", t * 0.1f);
+
+
+    }
+
 
 }
