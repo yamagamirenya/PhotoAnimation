@@ -8,17 +8,20 @@ using System.Collections;
 public class Origami2 : MonoBehaviour
 {
     public GameObject 
-        Origami3, 
+        origami3, 
         downUI;
 
-    float t=0;
+    public float t=0;
 
     public Material _mat;
+
+    Origami3 origami3Script;
 
     //Start is nothing
     void Start()
     {
-      
+
+        origami3Script = origami3.GetComponent<Origami3>();
 
     }
 
@@ -28,13 +31,23 @@ public class Origami2 : MonoBehaviour
 
         if (Mathf.Lerp(0, Mathf.PI, t * 0.2f) == Mathf.PI)
         {
-            Origami3.SetActive(true);
-            Origami3.GetComponent<Origami3>().enabled = true;
+            origami3.SetActive(true);
+            origami3Script.enabled = true;
             downUI.SetActive(true);
-            Destroy(this.gameObject);
+            this.gameObject.GetComponent<MeshRenderer>().enabled = false; ;           
         }
 
-        Origami2Mesh();
+        if (origami3Script.blurOptimizedChange == true)
+        {
+            OriginalOrigami2Mesh();
+        }
+        else
+        {
+            Origami2Mesh();
+
+        }
+
+
     }
 
 
@@ -142,5 +155,100 @@ public class Origami2 : MonoBehaviour
 
     }
 
+    void OriginalOrigami2Mesh()
+    {
+
+        var mesh = new Mesh();
+        mesh.vertices = new Vector3[]
+        {
+
+        new Vector3(0.5f,0),
+        new Vector3(0.5f,0.5f),
+        new Vector3(0,0.5f),
+
+
+        new Vector3(0.5f,0),
+        new Vector3(1,0.5f),
+        new Vector3(0.5f,0.5f),
+
+        new Vector3(0.5f,0.5f),
+        new Vector3(1,0.5f),
+
+        new Vector3(1,1),
+
+
+        new Vector3(1,1),
+        new Vector3(0.5f,1),
+        new Vector3(0.5f,0.5f),
+
+
+        new Vector3(0.5f,0.5f),
+        new Vector3(0,0.5f),
+        new Vector3(0.5f,1),
+
+        new Vector3(0,0.5f),
+        new Vector3(0,1),
+        new Vector3(0.5f,1)
+
+
+
+
+        };
+
+        mesh.triangles = new int[]
+        {
+            0,1,2,
+
+            3,4,5,
+
+            8,7,6,
+
+            9,10,11,
+
+            12,13,14,
+
+            15,16,17
+        };
+
+        mesh.uv = new Vector2[]
+        {
+        new Vector2(0.5f,0),
+        new Vector2(0.5f,0.5f),
+        new Vector2(0,0.5f),
+
+        new Vector2(0.5f,0),
+        new Vector2(1,0.5f),
+        new Vector2(0.5f,0.5f),
+
+        new Vector2(0.5f,0.5f),
+        new Vector2(1,0.5f),
+        new Vector2(1,1),
+
+        new Vector2(1,1),
+        new Vector2(0.5f,1),
+        new Vector2(0.5f,0.5f),
+
+
+        new Vector2(0.5f,0.5f),
+        new Vector2(0,0.5f),
+        new Vector2(0.5f,1),
+
+        new Vector2(0,0.5f),
+        new Vector2(0,1),
+        new Vector2(0.5f,1)
+
+
+
+        };
+
+        var filter = GetComponent<MeshFilter>();
+        filter.sharedMesh = mesh;
+
+        var renderer = GetComponent<MeshRenderer>();
+        renderer.material = _mat;
+
+
+
+    }
 
 }

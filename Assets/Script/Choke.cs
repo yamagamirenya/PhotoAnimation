@@ -3,14 +3,18 @@ using System.Collections;
 
 public class Choke : MonoBehaviour {
 
-    private Material material;
+    public GameObject textMask;
+    private Material imageMaterial,
+                     textMaskMaterial;
+   
     float n;
 	// Use this for initialization
 	void Start () {
 
-        material = this.gameObject.GetComponent<Renderer>().material;
+        imageMaterial = this.gameObject.GetComponent<Renderer>().material;
+        textMaskMaterial = textMask.GetComponent<Renderer>().material;
         n = 0;
-        print(material);
+        print(imageMaterial);
 	}
 	
 	// Update is called once per frame
@@ -18,8 +22,8 @@ public class Choke : MonoBehaviour {
 
         n += Time.deltaTime;
 
-        material.SetFloat("_Flip", n*0.5f-1);
-
+        imageMaterial.SetFloat("_Flip", n*0.5f-1);
+        textMaskMaterial.SetFloat("_Flip", 1 - n * 0.5f);
 
 	}
 }

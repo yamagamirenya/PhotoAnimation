@@ -3,7 +3,7 @@
 Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
-	_Range("Range",Range(0.0001,1)) = 0.01
+	_Range("Range",Range(0.0001,1)) = 0.005
 		_Flip("Flip",Range(-1, 1)) = 0
 
 

@@ -18,7 +18,7 @@ namespace UnityStandardAssets.ImageEffects
         }
 
         [Range(0.0f, 10.0f)]
-        public float blurSize = 3.0f;
+        public float blurSize = 0f;
 
         [Range(1, 4)]
         public int blurIterations = 2;

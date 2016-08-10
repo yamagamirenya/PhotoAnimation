@@ -20,8 +20,8 @@ public class Button : MonoBehaviour {
 
     public GameObject
         mainCamera,
-        AllInputfield, 
-        ClickAction, 
+        allInputfield, 
+        clickAction, 
         fallPhoto, 
         dowarfPhotos;
 
@@ -35,9 +35,13 @@ public class Button : MonoBehaviour {
 
         mainCamera.GetComponent<BlurOptimized>().enabled = false;
 
-        Destroy(AllInputfield);
-        Destroy(ClickAction);
+        //Destroy(AllInputfield);
+        //Destroy(ClickAction);
 
+        allInputfield.SetActive(false);
+        clickAction.SetActive(false);
+
+        print("osareteru");
         fallPhoto.SetActive(true);
         dowarfPhotos.SetActive(true);
     }

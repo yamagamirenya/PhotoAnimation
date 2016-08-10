@@ -6,17 +6,27 @@ public class FallPhoto : MonoBehaviour {
 
     public GameObject
        paperPhoto,
-       FallParticleSystem;
+       FallParticleSystem,
+       origami3;
 
-    bool
-        move = true;
+ 
 
     public bool
-        nextFallPhotoActiom;
+        move = true,
+        nextFallPhotoActiom,
+        japonicaAction;
 
-    float
-        d,
-        t = 0;
+   
+
+    public float 
+        t = 0,
+            d;
+
+    Vector3
+          firstPosition;
+
+    public float
+        moveSpeed;
 
     Material 
         fallPhotoMaterial,
@@ -29,8 +39,11 @@ public class FallPhoto : MonoBehaviour {
         fallPhotoMaterial = GetComponent<Renderer>().material;
         notePhotoMaterial = paperPhoto.GetComponent<Renderer>().material;
 
-    }
+        fallPhotoMaterial.SetFloat("_Alpha", 1);
+        firstPosition = transform.position;
 
+
+    }
 
     public void Update () {
 
@@ -39,7 +52,9 @@ public class FallPhoto : MonoBehaviour {
 
         NextFallPhotoAction();
 
-	}
+
+
+    }
 
     void OnCollisionEnter(Collision other)
     {
@@ -55,7 +70,7 @@ public class FallPhoto : MonoBehaviour {
         {
             d = Mathf.Sin(Time.time) * 0.01f;
             transform.position = this.transform.position
-                                    - new Vector3(0, 0.02f, d);
+                                    - new Vector3(0, moveSpeed*0.02f, d);
 
         }
         else
@@ -80,10 +95,14 @@ public class FallPhoto : MonoBehaviour {
 
             if (1 - t * 0.1f < 0)
             {
-
+                japonicaAction = true;
                 nextFallPhotoActiom = false;
-                Destroy(this.gameObject);
+                
+                d = 0;
 
+                this.gameObject.transform.position = firstPosition;
+                this.gameObject.SetActive(false);
+                FallParticleSystem.SetActive(false);
             }
 
         }
@@ -100,6 +119,5 @@ public class FallPhoto : MonoBehaviour {
 
 
     }
-
-
+  
 }

@@ -5,11 +5,15 @@ public class DowarfPhoto : MonoBehaviour {
 
     public GameObject 
         FallPhoto, 
-        japonicaNote;
+        japonicaNote,
+        japonica,
+        origami1;
 
     bool 
         jump =true,
-        changeRotation;
+        changeRotation,
+        changeRotation2=true,
+        lookUp;
 
     float
         n = 0,
@@ -36,88 +40,89 @@ public class DowarfPhoto : MonoBehaviour {
 
 	
 	void Update () {
-
-        JampAction();
-
-        LookUpAction();
-
+        if (!lookUp)
+        {
+            JampAction();
+        }
+        else
+        {
+            LookUpAction();
+        }
     }
 
     void OnCollisionEnter(Collision other)
     {
         jump = false;
+        lookUp = true;
+
         _animator.SetBool("Jamp", false);
 
+        if(other.gameObject == japonica)
+        {
+            jump = false;
+        }
     }
-
 
     void DowarfRandomJampAction()
     {
-
-        if (Random.value < 0.5f)
-        {
-            toDowarfpositionZ = -5;
-            changeRotation = true;
-        }
-        else
-        {
+     
             toDowarfpositionZ = 1.2f;
-        }
 
     }
 
     void JampAction()
     {
-        if (fallphoto.nextFallPhotoActiom)
+        if (fallphoto!= null)
         {
-            if (jump)
+            if (fallphoto.nextFallPhotoActiom)
             {
-                n += Time.deltaTime;
-
-
-                if (!this.gameObject.GetComponent<BoxCollider>())
+                if (jump)
                 {
-                    this.gameObject.AddComponent<BoxCollider>();
+                    n += Time.deltaTime;
+
+
+                    if (!this.gameObject.GetComponent<BoxCollider>())
+                    {
+                        this.gameObject.AddComponent<BoxCollider>();
+
+                       // this.gameObject.GetComponent<BoxCollider>().size = new Vector3 ()
+                    }
+
+
+                    _animator.SetBool("Jamp", true);
+
+                    if (changeRotation)
+                    {
+                        transform.Rotate(0, 180, 0);
+                    }
+
+                    changeRotation = false;
+
+                    transform.parent = null;
+
+                    //Dowarf can jamp to below popsition 
+                    transform.position = new Vector3(this.transform.position.x + Random.Range(0, 1),
+
+                                                this.transform.position.y + (0.5f * n - 0.5f * 0.98f * n * n) * 0.5f,
+
+                                                firstDowarfPosition.z + (3 + toDowarfpositionZ * 1.35f) * n);
+
+
                 }
-
-
-                _animator.SetBool("Jamp", true);
-
-                if (changeRotation)
-                {
-                    transform.Rotate(0, 180, 0);
-                }
-
-                changeRotation = false;
-
-                transform.parent = null;
-
-                //Dowarf can jamp to below popsition 
-                transform.position = new Vector3(this.transform.position.x + Random.Range(0, 1),
-
-                                            this.transform.position.y + (0.5f * n - 0.5f * 0.98f * n * n) * 0.5f,
-
-                                            firstDowarfPosition.z + (3 + toDowarfpositionZ * 1.35f) * n);
-
-
             }
         }
     }
 
     void LookUpAction()
     {
-
-        if (japonicaNote != null)
-        {
-            if (japonicaNote.transform.position.y >= 3.5f)
-            {
+        
                 _animator.SetBool("LookUp", true);
-
-                transform.Rotate(0, -180, 0);
-
-
-            }
+        if (changeRotation2)
+        {
+            transform.rotation =Quaternion.Euler(0, 90, 0);
+            changeRotation2 = false;
         }
+        
 
     }
     

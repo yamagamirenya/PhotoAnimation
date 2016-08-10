@@ -6,15 +6,21 @@ using UnityStandardAssets.ImageEffects;
 public class MouseManager : MonoBehaviour
 {
 
-    public GameObject 
-        japonica, 
-        japonicaNote, 
+    public GameObject
+        japonica,
+        japonicaEnd,
+        japonicaNote,
         origami3,
         japonicaAxis,
         camera1,
-        allInputfield;
+        allInputfield,
+        clickAction;
 
     float d = 0;
+
+    Vector3 
+        firstPosition,
+        firstRotation;
 
     bool openJaponica;
 
@@ -23,10 +29,14 @@ public class MouseManager : MonoBehaviour
     RaycastHit hit;
 
 
+
     void Start()
     {
         ray = new Ray();
         hit = new RaycastHit();
+
+        firstPosition = japonica.transform.position;
+        firstRotation = japonica.transform.localEulerAngles;
     }
 
     void Update()
@@ -43,8 +53,9 @@ public class MouseManager : MonoBehaviour
         }
 
             JaponicaControl();
-    }
 
+            FinishToFirstScean();
+    }
 
     void RayContorol()
     {
@@ -56,7 +67,7 @@ public class MouseManager : MonoBehaviour
             {
                 camera1.GetComponent<BlurOptimized>().enabled = true;
                 allInputfield.SetActive(true);
-
+                clickAction.SetActive(false);
             }
         }
 
@@ -77,9 +88,33 @@ public class MouseManager : MonoBehaviour
         {
             d += 45 * Time.deltaTime;
 
-            if (d > 100 && d < 180 + 100)
-                japonica.transform.RotateAround(japonicaAxis.transform.position, new Vector3(-1, 0, -1), 45 * Time.deltaTime);
+
+            if (d > 100 && d < 180 + 95)
+            {
+                japonica.transform.RotateAround(japonicaAxis.transform.position, new Vector3(-1.745f, 0, -1), 45 * Time.deltaTime);
+                japonicaEnd.transform.RotateAround(japonicaAxis.transform.position, new Vector3(-1.745f, 0, -1), 45 * Time.deltaTime);
+            }
         }
+
+    }
+
+    void FinishToFirstScean()
+    {
+        Origami3 origami3Script = origami3.GetComponent<Origami3>();
+
+       if( origami3Script.blurOptimizedChange == true)
+        {
+            japonica.transform.position = firstPosition;
+            japonica.transform.rotation = Quaternion.Euler(firstRotation);
+
+            openJaponica = false;
+            clickAction.SetActive(true);
+            allInputfield.SetActive(false);
+
+            d = 0;
+
+        }
+
     }
 }
 

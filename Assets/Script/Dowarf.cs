@@ -10,6 +10,8 @@ public class Dowarf : MonoBehaviour {
     Animator 
         _animator;
 
+    bool finishRiding = true;
+
     // Use this for initialization
     void Start () {
 
@@ -37,11 +39,11 @@ public class Dowarf : MonoBehaviour {
 
                 _animator.SetBool("Riding", true);
             }
-            else
-            {
-                _animator.SetBool("Riding", false);
-            }
-
+        }
+        else
+        {
+            if(finishRiding)
+            _animator.SetBool("Riding", false);
         }
 
     }
@@ -52,7 +54,8 @@ public class Dowarf : MonoBehaviour {
         {
             if (origami1.activeInHierarchy)
             {
-                _animator.SetBool("Riding", false);
+                finishRiding = false;
+                _animator.SetBool("Riding", true);
 
             }
         }
